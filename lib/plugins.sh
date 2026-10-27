@@ -568,6 +568,7 @@ write_directory_cache() {
 
 plugin_directory_refresh() {
   local ids listed stats merged
+  offline && { plugin_directory_cached; return; }
   ids=$(plugins_state | jq -c '[ .[] | .id ]' 2>/dev/null)
   [[ -n $ids ]] || ids='[]'
 

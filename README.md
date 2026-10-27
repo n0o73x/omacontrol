@@ -322,6 +322,21 @@ omarchy bar set io.github.twiking.omacontrol showBatteryWarnings false --json
 Hovering over the gear still lists everything, whatever the badge shows. Set an
 option back to `true` to bring that part of the badge back.
 
+### Offline mode
+
+On its own, OmaControl makes four requests: the news from omarchy.org, the
+plugin catalogue and its stats, and a public address lookup at Cloudflare.
+To stop all four, add `"offline": true` to `~/.config/omarchy/omacontrol.json`
+(or set `OMACONTROL_OFFLINE=1` in the shell's environment):
+
+```sh
+f=~/.config/omarchy/omacontrol.json
+jq '.offline = true' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+```
+
+Each one then shows whatever it last fetched. Things you click yourself, such
+as opening a headline or running a speed test, still go out.
+
 ## How it writes
 
 Your config files are never parsed and rewritten, since that is how a settings

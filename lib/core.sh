@@ -16,6 +16,17 @@ MANAGED_MARKER="omacontrol:managed"
 
 die() { echo "omacontrol: $*" >&2; exit 1; }
 
+# Offline mode: nothing here reaches the internet on its own. The news, the
+# plugin catalogue and its stats, and the public address lookup each answer
+# from their last cache instead, so every page still draws, just older. Asked
+# for by OMACONTROL_OFFLINE=1 in the environment, or by "offline": true in the
+# store, which survives an update and needs no shell restart. Things you click
+# yourself — opening a headline, a speed test — are yours to decide on.
+offline() {
+  [[ ${OMACONTROL_OFFLINE:-} == 1 ]] && return 0
+  [[ -f $STORE ]] && [[ $(jq -r '.offline // false' <"$STORE" 2>/dev/null) == true ]]
+}
+
 # A program's command line is readable by every user on the machine, through
 # /proc/<pid>/cmdline, for as long as it runs. jq takes its variables there, and
 # what this window hands it is often a document read from a private file:

@@ -145,6 +145,7 @@ public_ip_cached() {
 public_ip_fetch() {
   local cache age now report ip colo next
   cache=$(public_ip_cached)
+  offline && { printf '%s\n' "$cache"; return; }
   now=$(date +%s)
   age=$(( now - $(jq -r '.at // 0' <<<"$cache" 2>/dev/null || echo 0) ))
   # Only inside the debounce window is the stored answer returned as-is.

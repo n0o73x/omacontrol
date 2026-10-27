@@ -108,7 +108,7 @@ news_fetch() {
   # free to ask depends on it, and for a while it was not true: `fetch` ran the
   # request unconditionally and `stale` was a subcommand nobody called, so a
   # window opened twenty times made twenty requests.
-  if [[ ${1:-} != --force ]] && ! news_stale; then
+  if offline || { [[ ${1:-} != --force ]] && ! news_stale; }; then
     # Still seed, in case a cache was written before read marks existed.
     news_seed
     news_cached
